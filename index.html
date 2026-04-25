@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pomodoro Zamanlayıcı - Odaklanma ve verimlilik takip uygulaması">
+    <title>Pomodoro Zamanlayıcı | Odak & Verimlilik</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+<div class="bg-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+
+<header class="app-header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="14" stroke="url(#grad1)" stroke-width="2.5"/>
+                    <path d="M16 6 L16 16 L22 22" stroke="url(#grad1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="grad1" x1="0" y1="0" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#ff6b6b"/>
+                            <stop offset="100%" stop-color="#ffa36b"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>Pomodoro</h1>
+            </div>
+            <div class="header-stats">
+                <div class="stat-chip" id="todaySessionsChip">
+                    <span class="stat-icon">🔥</span>
+                    <span id="todaySessions">0</span> oturum
+                </div>
+                <div class="stat-chip" id="todayMinutesChip">
+                    <span class="stat-icon">⏱️</span>
+                    <span id="todayMinutes">0</span> dk
+                </div>
+            </div>
+        </header>
+
+<main class="main-content">
+<section class="timer-section" id="timerSection">
+                <div class="timer-mode-tabs">
+                    <button class="mode-tab active" data-mode="focus" id="focusTab">
+                        <span class="tab-icon">🎯</span> Odaklan
+                    </button>
+                    <button class="mode-tab" data-mode="break" id="breakTab">
+                        <span class="tab-icon">☕</span> Mola
+                    </button>
+                </div>
+
+                <div class="timer-ring-container">
+                    <svg class="timer-ring" viewBox="0 0 280 280">
+                        <circle class="timer-ring-bg" cx="140" cy="140" r="126"/>
+                        <circle class="timer-ring-progress" cx="140" cy="140" r="126" id="timerProgress"/>
+                    </svg>
+                    <div class="timer-display">
+                        <div class="timer-status" id="timerStatus">Hazır</div>
+                        <div class="timer-time" id="timerTime">30:00</div>
+                        <div class="timer-label" id="timerLabel">Odaklanma Süresi</div>
+                    </div>
+                </div>
+
+<div class="timer-controls">
+                    <button class="control-btn secondary" id="resetBtn" title="Sıfırla">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                            <path d="M3 3v5h5"/>
+                        </svg>
+                    </button>
+                    <button class="control-btn primary" id="startBtn" title="Başlat">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" id="playIcon">
+                            <polygon points="6,3 20,12 6,21"/>
+                        </svg>
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" id="pauseIcon" style="display:none;">
+                            <rect x="5" y="3" width="4" height="18"/>
+                            <rect x="15" y="3" width="4" height="18"/>
+                        </svg>
+                    </button>
+                    <button class="control-btn finish" id="finishBtn" title="Bitir">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="3"/>
+                        </svg>
+                    </button>
+                </div>
+
+<div class="duration-settings">
+                    <div class="duration-group">
+                        <label>Odak Süresi</label>
+                        <div class="duration-selector">
+                            <button class="dur-btn" data-action="decrease" data-target="focus">−</button>
+                            <span id="focusDuration">30</span> dk
+                            <button class="dur-btn" data-action="increase" data-target="focus">+</button>
+                        </div>
+                    </div>
+                    <div class="duration-group">
+                        <label>Mola Süresi</label>
+                        <div class="duration-selector">
+                            <button class="dur-btn" data-action="decrease" data-target="break">−</button>
+                            <span id="breakDuration">5</span> dk
+                            <button class="dur-btn" data-action="increase" data-target="break">+</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+<section class="stats-section" id="statsSection">
+<div class="card focus-level-card" id="focusLevelCard">
+                    <div class="card-header">
+                        <h2>Odak Seviyeniz</h2>
+                        <div class="focus-badge" id="focusBadge">
+                            <span id="focusEmoji">🌱</span>
+                            <span id="focusLevel">Başlangıç</span>
+                        </div>
+                    </div>
+                    <div class="focus-meter">
+                        <div class="meter-track">
+                            <div class="meter-fill" id="focusMeterFill" style="width: 0%"></div>
+                        </div>
+                        <div class="meter-labels">
+                            <span>Az</span>
+                            <span>Orta</span>
+                            <span>İyi</span>
+                            <span>Çok İyi</span>
+                        </div>
+                    </div>
+                    <div class="focus-suggestion" id="focusSuggestion">
+                        <div class="suggestion-icon">💡</div>
+                        <p id="suggestionText">İlk pomodoro oturumunuzu başlatarak odak yolculuğunuza başlayın!</p>
+                    </div>
+                </div>
+
+<div class="card stats-card">
+                    <div class="card-header">
+                        <h2>Haftalık İstatistikler</h2>
+                    </div>
+                    <div class="weekly-chart" id="weeklyChart">
+                        <div class="chart-bar" data-day="Pzt"><div class="bar-fill" id="bar-0"></div><span>Pzt</span></div>
+                        <div class="chart-bar" data-day="Sal"><div class="bar-fill" id="bar-1"></div><span>Sal</span></div>
+                        <div class="chart-bar" data-day="Çar"><div class="bar-fill" id="bar-2"></div><span>Çar</span></div>
+                        <div class="chart-bar" data-day="Per"><div class="bar-fill" id="bar-3"></div><span>Per</span></div>
+                        <div class="chart-bar" data-day="Cum"><div class="bar-fill" id="bar-4"></div><span>Cum</span></div>
+                        <div class="chart-bar" data-day="Cmt"><div class="bar-fill" id="bar-5"></div><span>Cmt</span></div>
+                        <div class="chart-bar" data-day="Paz"><div class="bar-fill" id="bar-6"></div><span>Paz</span></div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalSessions">0</div>
+                            <div class="stat-label">Toplam Oturum</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalMinutes">0</div>
+                            <div class="stat-label">Toplam Dakika</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="avgDaily">0</div>
+                            <div class="stat-label">Günlük Ort. (dk)</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="streak">0</div>
+                            <div class="stat-label">Gün Serisi 🔥</div>
+                        </div>
+                    </div>
+                </div>
+
+<div class="card history-card">
+                    <div class="card-header">
+                        <h2>Son Oturumlar</h2>
+                        <button class="clear-btn" id="clearHistoryBtn" title="Geçmişi Temizle">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3,6 5,6 21,6"/>
+                                <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v2"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <div class="empty-history">
+                            <span>📋</span>
+                            <p>Henüz oturum kaydı yok</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+<div class="notification-overlay" id="notificationOverlay">
+            <div class="notification-card" id="notificationCard">
+                <div class="notification-icon" id="notifIcon">☕</div>
+                <h2 id="notifTitle">Mola Zamanı!</h2>
+                <p id="notifMessage">Harika iş! 30 dakika odaklandınız. Biraz dinlenin.</p>
+                <button class="notif-btn" id="notifBtn">Tamam</button>
+            </div>
+        </div>
+
+<footer class="app-footer">
+            <p>Pomodoro Zamanlayıcı — <em>BURAK CAN İNAL</em></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
